@@ -17,12 +17,17 @@ public class Game extends Canvas implements Runnable {
 
     private Spritesheet sheet;
     private BufferedImage[] player;
+    private int frames = 0;
+    private int maxFrames = 20;
+    private int curAnimation = 0;
+    private  int maxAnimation = 2;
 
     public Game(){
         sheet = new Spritesheet("res/spritesheet.png");
+        player = new BufferedImage[3];
         player[0] = sheet.getSprite(0,0, 32, 32);
         player[1] = sheet.getSprite(32,0, 32, 32);
-        player[2] = sheet.getSprite(64,0, 32, 32);
+
         setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
         initFrame();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -59,7 +64,14 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void tick() {
-
+        frames++;
+        if(frames > maxFrames){
+            frames = 0;
+            curAnimation++;
+            if(curAnimation >= maxAnimation){
+                curAnimation = 0;
+            }
+        }
     }
 
     public void render(){
@@ -77,8 +89,8 @@ public class Game extends Canvas implements Runnable {
         g2.setColor(new Color(0,0,0,100));
         g2.fillRect(0,0,WIDTH, HEIGHT);
 
-        g2.rotate(Math.toRadians(90),50+16,50+16);
-        g2.drawImage(player[0], 50, 50, null);
+        //g2.rotate(Math.toRadians(90),50+16,50+16);
+        g2.drawImage(player[curAnimation], 50, 50, null);
 
         /****/
         g.dispose();
